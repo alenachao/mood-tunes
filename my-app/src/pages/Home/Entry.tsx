@@ -1,15 +1,12 @@
-import  React, {useState} from 'react';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import  React, {useState, useEffect} from 'react';
 import Calendar from '@/components/Calendar'
 import { Typography, Stack, Container, makeStyles } from '@mui/material';
 import moment from 'moment'
 import Header from '@/components/Header';
-import { DateCalendar} from '@mui/x-date-pickers'
+import SearchBar from '@/components/SearchBar';
 
 export default function Entry() {
-    const [dateState, setDateState] = useState(new Date())
-    
+    const [dateState, setDateState] = useState(new Date());
 
     return (
         <Container sx={{ py: 2, position: 'relative' }}>
@@ -24,6 +21,9 @@ export default function Entry() {
                 <Typography textAlign="center" variant="subtitle1">
                     {moment(dateState).format('MMMM Do YYYY')}
                 </Typography>
+
+                <SearchBar />
+
             </Stack>
             </Stack>
             <Header />
