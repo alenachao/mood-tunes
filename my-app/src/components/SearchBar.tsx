@@ -8,50 +8,21 @@ const client_secret = "1790c9ad7d9d4ac7bc84f1b6f4e363ac";
 
 export default function Search() {
     const [searchQuery, setSearchQuery] = useState("");
-    const [accessToken, setAccessToken] = useState("");
-
-    useEffect(() => {
-        var authParameters = {
-            method: 'POST',
-            headers: {
-                //'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64')),
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'grant_type=client_credientials&client_id=' + client_id + '&client_secret' + client_secret
-        }
-
-        fetch('https://accounts.spotify.com/api/token', authParameters)
-            .then(result => result.json())
-            .then(data => setAccessToken(data.access_token))
-
-        // var authParameters = {
-        //     method: 'POST',
-        //     url: 'https://accounts.spotify.com/api/token',
-        //     headers: {
-        //     'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
-        //     },
-        //     form: {
-        //     grant_type: 'client_credentials'
-        //     },
-        //     json: true
-        // };
-        
-        
-        // });
-    }, [])
+    const [response, setResponse] = useState("");
 
     async function handleSubmit(e) {
         e.preventDefault();
+        console.log('submit');
         var trackParameters = {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + accessToken
-            }
+                'Content-Type': 'string',
+              },
         }
-        var tracks = await fetch('https://api.spotify.com/v1/search?q=' + searchQuery + '&type=artist', trackParameters)
-            .then(response => response.json())
-            .then(data => console.log(data))
+        var tracks = await fetch('http://localhost:8080/?q=' + searchQuery + trackParameters)
+            .then(tracks => console.log('success?'))
+            // .then(response => response.json())
+            // .then(data => console.log(data))
     }
     
     return (
