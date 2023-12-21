@@ -1,0 +1,10 @@
+img {
+    width:2em;
+    border-radius: 5px;
+}
+
+.leftAlignedButton {  
+    justify-content: flex-start !important;
+    text-align: left;
+    
+}

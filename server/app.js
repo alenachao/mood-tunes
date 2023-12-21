@@ -41,9 +41,9 @@ app.get("/", (req, res) => {
                 'Authorization': 'Bearer ' + access_token
             }
         }
-        const response = await fetch('https://api.spotify.com/v1/search?q=' + req + '&type=artist', trackParameters)
+        //console.log(req.query.q);
+        const response = await fetch('https://api.spotify.com/v1/search?q=' + decodeURIComponent(req.query.q) + '&type=track' + '&limit=7', trackParameters)
         return await response.json();
-
     }
 
     getToken().then(response => {
