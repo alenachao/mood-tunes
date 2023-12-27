@@ -20,7 +20,7 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "public/setupProxy.js"],
   "exclude": ["node_modules", "**/node_modules/*", "dist", "**/dist/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

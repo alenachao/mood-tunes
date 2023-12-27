@@ -1,17 +1,15 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Register from '@/pages/Auth/Register';
-import Login from '@/pages/Auth/Login';
-import Home from '@/pages/Home/Home';
-import Entry from '@/pages/Home/Entry';
+import Template from '@/pages/Template';
+import Entry from '@/pages/Entry';
+import Home from '@/pages/Home';
 
 const Routing = () => {
   return (
     <Routes>
-      <Route path="*" element={<Entry />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/template" element={<Home />} />
+      <Route path="*" element={<Home />} />
+      <Route path="/home" element={<Entry />} />
+      <Route path="/template" element={<Template />} />
     </Routes>
   );
 };
