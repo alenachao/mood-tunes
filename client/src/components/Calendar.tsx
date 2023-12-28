@@ -1,17 +1,22 @@
 import * as React from 'react';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateCalendar} from '@mui/x-date-pickers'
 import Calendar from 'react-calendar'
 import { styled } from '@mui/material';
 import 'react-calendar/dist/Calendar.css'
 import "@/assets/css/Calendar.css";
 import { useTheme } from '@mui/material/styles';
+import { isSameDay } from "date-fns";
 
-
-  
-  export default function StyledComponents({dateState, setDateState}) {
+  export default function StyledComponents({dateState, setDateState, track}) {
     const theme = useTheme();
+
+    const show = ({ date, view }) => {
+      if (view === "month" && track) {
+        if (isSameDay(date, dateState)) {
+          return <img src={track.album.images[0].url}/>;
+        }
+      }
+      return null;
+    };
 
     const MyCalendar = styled(Calendar)({
         color: theme.palette.primary.contrastText,
@@ -22,5 +27,5 @@ import { useTheme } from '@mui/material/styles';
     const changeDate = (e) => {
         setDateState(e)
     }
-    return <MyCalendar value={dateState} onChange={setDateState}/>;
+    return <MyCalendar value={dateState} onChange={setDateState} tileContent={show}/>;
   }

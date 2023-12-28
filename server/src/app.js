@@ -1,6 +1,7 @@
 const express = require("express");
 const querystring = require('querystring');
-
+const { connectToDatabase } = require('./db');
+const routes = require('./routes');
 const app = express();
 
 var client_id = process.env.REACT_APP_CLIENT_ID;
@@ -8,6 +9,20 @@ var client_secret = process.env.REACT_APP_CLIENT_SECRET;
 
 global.access_token = ''
 
+connectToDatabase();
+
+app.listen(8080, () => {
+console.log("App is listening on port 8080!");
+});
+
+app.use('/api', routes);
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
 
 // Randomly generate a string to protect against attacks such as cross-site request forgery
 var generateRandomString = function (length) {
@@ -19,17 +34,6 @@ var generateRandomString = function (length) {
     }
     return text;
   };
-
-app.listen(8080, () => {
-console.log("App is listening on port 8080!");
-});
-
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-});
 
 // Have user log into a Spotify premium account to enable web playback (https://developer.spotify.com/documentation/web-playback-sdk)
 app.get('/auth/login', (req, res) => {
@@ -75,6 +79,28 @@ app.get('/auth/callback', async (req, res) => {
         if (response.ok) {
             const responseBody = await response.json();
             access_token = responseBody.access_token;
+            // Get user info
+            var userParameters = {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + access_token
+                }
+            }
+            
+            const userResponse = await fetch('https://api.spotify.com/v1/me', userParameters);
+
+            // Update Database
+            var dbParameters = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(response),
+            }
+
+            dbResponse = await fetch('/api/login', dbParameters);
+
+            // Redirect user to home page
             res.redirect('/home');
         } else {
             console.error(`Error: ${response.statusText}`);
@@ -127,7 +153,6 @@ app.get("/", (req, res) => {
     // Return tracks
     getToken().then(response => {
     search(response.access_token).then(results => {
-        console.log(results)
         res.send(results)
     })
 
