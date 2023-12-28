@@ -83,25 +83,35 @@ app.get('/auth/callback', async (req, res) => {
             var userParameters = {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + access_token
+                    'Authorization': 'Bearer ' + access_token,
+                    'Content-Type': 'application/json'
                 }
             }
             
             const userResponse = await fetch('https://api.spotify.com/v1/me', userParameters);
 
+            const userResponseBody = await userResponse.json();
+
+            // console.log(userResponseBody)
             // Update Database
             var dbParameters = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(response),
+                body: JSON.stringify(userResponseBody),
             }
 
-            dbResponse = await fetch('/api/login', dbParameters);
+            await fetch('http://localhost:8080/api/login', dbParameters).then(response => response.json())
+            .then(data => {
+                // Log the response data on the client side
+                console.log('Server Response:', data);
+                res.redirect('/home');
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
 
-            // Redirect user to home page
-            res.redirect('/home');
         } else {
             console.error(`Error: ${response.statusText}`);
             res.status(response.status).send('Error during authentication');

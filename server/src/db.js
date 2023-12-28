@@ -1,8 +1,8 @@
 const { MongoClient } = require('mongodb');
 
-const uri = process.env.MONGODB_CONNECTION_STRING;
+const connectionString = "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.1";
 
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(connectionString);
 
 async function connectToDatabase() {
   try {
@@ -14,7 +14,7 @@ async function connectToDatabase() {
 }
 
 function getDatabase() {
-  return client.db('Users Database');
+  return client.db('moodtunes');
 }
 
 module.exports = { connectToDatabase, getDatabase };
