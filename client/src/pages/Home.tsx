@@ -28,13 +28,15 @@ export default function HomePage() {
     const handleSubmitButtonClick = () => {
         setCalendarTrack(selectedTrack);
         setSearchState(true);
+
+        // TODO: add dateState and track to database
     };
 
     // get token from backend
     useEffect(() => {
 
         async function getToken() {
-        const response = await fetch('/auth/token');
+        const response = await fetch('/api/auth/token');
         const json = await response.json();
         setToken(json.access_token);
         }

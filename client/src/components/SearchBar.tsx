@@ -19,7 +19,7 @@ export default function Search({ onButtonClick }) {
                 'Content-Type': 'string',
               },
         }
-        var returnedTracks = await fetch('http://localhost:8080/?q=' + encodeURIComponent(searchQuery), trackParameters)
+        var returnedTracks = await fetch('/api/search?q=' + encodeURIComponent(searchQuery), trackParameters)
             .then(response => response.json())
             .then(data => {
                 console.log(data);

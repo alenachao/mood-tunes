@@ -24,8 +24,6 @@ import { isSameDay } from "date-fns";
         padding: theme.spacing(1),
         borderRadius: theme.shape.borderRadius,
     });
-    const changeDate = (e) => {
-        setDateState(e)
-    }
+
     return <MyCalendar value={dateState} onChange={setDateState} tileContent={show}/>;
   }
