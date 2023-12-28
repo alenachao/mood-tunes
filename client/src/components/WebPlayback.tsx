@@ -1,23 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-const track = {
-    name: "",
-    album: {
-        images: [
-            { url: "" }
-        ]
-    },
-    artists: [
-        { name: "" }
-    ]
-}
-
 function WebPlayback(props) {
 
     const [is_paused, setPaused] = useState(false);
     const [is_active, setActive] = useState(false);
     const [player, setPlayer] = useState(undefined);
-    const [current_track, setTrack] = useState(track);
 
     useEffect(() => {
 
@@ -30,13 +17,12 @@ function WebPlayback(props) {
         window.onSpotifyWebPlaybackSDKReady = () => {
 
             const player = new window.Spotify.Player({
-                name: 'Web Playback SDK',
+                name: 'MoodTunes',
                 getOAuthToken: cb => { cb(props.token); },
                 volume: 0.5
             });
 
             setPlayer(player);
-
 
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
@@ -52,7 +38,6 @@ function WebPlayback(props) {
                     return;
                 }
 
-                setTrack(state.track_window.current_track);
                 setPaused(state.paused);
 
                 player.getCurrentState().then( state => { 
@@ -66,6 +51,7 @@ function WebPlayback(props) {
         };
     }, []);
 
+    // case where user has not transfered playback yet
     if (!is_active) { 
         return (
             <>
@@ -76,33 +62,47 @@ function WebPlayback(props) {
                 </div>
             </>)
     } else {
-        return (
-            <>
-                <div className="container">
-                    <div className="main-wrapper">
+        // user has made selection and can now play the song
+        if (props.selectedTrack) {
+            player.getCurrentState().then(state => {
+                if (!state) {
+                    console.error('User is not playing music through the Web Playback SDK');
+                    return;
+                }            
+                state.track_window.current_track = props.selectedTrack;
+                });
+            
+            return (
+                <>
+                    <div className="container">
+                        <div className="main-wrapper">
 
-                        <img src={current_track.album.images[0].url} className="now-playing__cover" alt="" />
+                            <img src={props.selectedTrack.album.images[0].url} className="now-playing__cover" alt="" />
 
-                        <div className="now-playing__side">
-                            <div className="now-playing__name">{current_track.name}</div>
-                            <div className="now-playing__artist">{current_track.artists[0].name}</div>
+                            <div className="now-playing__side">
+                                <div className="now-playing__name">{props.selectedTrack.name}</div>
+                                <div className="now-playing__artist">{props.selectedTrack.artists[0].name}</div>
 
-                            <button className="btn-spotify" onClick={() => { player.previousTrack() }} >
-                                &lt;&lt;
-                            </button>
+                                <button className="btn-spotify" onClick={() => { player.togglePlay() }} >
+                                    { is_paused ? "PLAY" : "PAUSE" }
+                                </button>
 
-                            <button className="btn-spotify" onClick={() => { player.togglePlay() }} >
-                                { is_paused ? "PLAY" : "PAUSE" }
-                            </button>
-
-                            <button className="btn-spotify" onClick={() => { player.nextTrack() }} >
-                                &gt;&gt;
-                            </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </>
-        );
+                </>
+                );
+        } else {
+            // playback has been transfered but user has not made selection yet
+            return (
+                <>
+                    <div className="container">
+                        <div className="main-wrapper">
+                            <b> Make a search to start playing! </b>
+                        </div>
+                    </div>
+                </>)
+        }
     }
 }
 

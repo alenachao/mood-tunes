@@ -2,7 +2,7 @@ import React from 'react';
 import TemplateTester from '@/components/TemplateTester';
 import { Typography, Stack, Container } from '@mui/material';
 
-const Home = () => {
+const TemplatePage = () => {
   return (
     <Container sx={{ py: 2, position: 'relative' }}>
       <Stack gap={1} my={2}>
@@ -18,4 +18,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default TemplatePage;

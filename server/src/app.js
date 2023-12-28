@@ -75,7 +75,7 @@ app.get('/auth/callback', async (req, res) => {
         if (response.ok) {
             const responseBody = await response.json();
             access_token = responseBody.access_token;
-            res.redirect('/');
+            res.redirect('/home');
         } else {
             console.error(`Error: ${response.statusText}`);
             res.status(response.status).send('Error during authentication');

@@ -6,17 +6,13 @@ import Button from "@mui/material/Button";
 import { Typography, Stack, Container } from '@mui/material';
 import "@/assets/css/SearchBar.css";
 
-const client_id = "afc1c3fdddba45398ae584c56ea24a2c";
-const client_secret = "1790c9ad7d9d4ac7bc84f1b6f4e363ac";
-
-export default function Search() {
+export default function Search({ onButtonClick }) {
     const [searchQuery, setSearchQuery] = useState("");
-    const [response, setResponse] = useState("");
     const [tracks, setTracks] = useState([]);
 
+    // when user submits search, make a get request to server and get back a list of search results (tracks)
     async function handleSubmit(e) {
         e.preventDefault();
-        // console.log('submit');
         var trackParameters = {
             method: 'GET',
             headers: {
@@ -24,14 +20,13 @@ export default function Search() {
               },
         }
         var returnedTracks = await fetch('http://localhost:8080/?q=' + encodeURIComponent(searchQuery), trackParameters)
-            //.then(tracks => console.log('success?'))
             .then(response => response.json())
             .then(data => {
                 console.log(data);
                 setTracks(data.tracks.items)
             })
     }
-    //console.log(tracks);
+
     return (
     //   <div
     //     style={{
@@ -45,16 +40,16 @@ export default function Search() {
         <Stack spacing={1}>
             <form onSubmit={handleSubmit}>
                 <TextField
-                id="search-bar"
-                className="text"
-                value={searchQuery}
-                onInput={(e) => {
-                    setSearchQuery(((e.target as HTMLTextAreaElement)).value);
-                }}
-                label="Search..."
-                variant="outlined"
-                placeholder="Search..."
-                size="small"
+                    id="search-bar"
+                    className="text"
+                    value={searchQuery}
+                    onInput={(e) => {
+                        setSearchQuery(((e.target as HTMLTextAreaElement)).value);
+                    }}
+                    label="Search..."
+                    variant="outlined"
+                    placeholder="Search..."
+                    size="small"
                 />
                 <IconButton type="submit" aria-label="search">
                     <SearchIcon style={{ fill: "blue" }} />
@@ -62,14 +57,21 @@ export default function Search() {
             </form>
             <Stack spacing={1}>
                 {tracks.map( (track, i) => {
-
                     return (
-                        <Button key={i} component="results" variant="contained" startIcon = { <img src={track.album.images[0].url}/> } className="leftAlignedButton" >
+                        <Button 
+                            key={i} 
+                            component="results" 
+                            variant="contained" 
+                            startIcon = { <img src={track.album.images[0].url}/> } 
+                            className="leftAlignedButton" 
+                            onClick={() => onButtonClick(track)}
+                        >
                             <span style={{ textTransform: 'none' }}> { track.name } <br /> { track.artists[0].name } </span>
                         </Button>
                     )
                 })}
             </Stack> 
+            
         </Stack>
 
     //     </div>
