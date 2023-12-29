@@ -39,7 +39,7 @@ export default function HomePage() {
             body: JSON.stringify({date, selectedTrack}),
         }
 
-        await fetch('http://localhost:5173/api/tracks', parameters).then(response => response.json())
+        await fetch('http://localhost:5173/api/tracks/store', parameters).then(response => response.json())
             .then(data => {
                 // Log the response data on the client side
                 console.log('Server Response:', data);

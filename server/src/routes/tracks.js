@@ -38,15 +38,18 @@ router.get("/query", async (req, res) => {
     const spotifyID = responseBody.spotifyID
 
     const date = req.query.q
+    //console.log("date: " + date)
 
     const db = getDatabase();
     const trackCollection = db.collection(spotifyID);
-    const track = await trackCollection.find({ date: date });
+    const track = await trackCollection.find({ date: date }).toArray;
+
+    //console.log("track: " + track.length)
 
     if (track.length === 0) {
-        res.json(null)
+        res.json({track: null})
     } else {
-        res.json({track: track})
+        res.json({track: track[0]})
     }
 });
 
