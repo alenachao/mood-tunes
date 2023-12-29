@@ -18,7 +18,9 @@ router.post("/store", async (req, res) => {
     const dateExists = await trackCollection.findOne({ date: date });
 
     if (!dateExists) { // if we do not have a song for that date yet then we will add it to the collection
-        await trackCollection.insertOne(req.body).then(response => {
+        await trackCollection.insertOne({ 
+            date: date,
+            track: track}).then(response => {
             res.json({ message: 'Track added to the database.' });
         });
     } else { // if it does exist, update the database with the new song
@@ -38,18 +40,15 @@ router.get("/query", async (req, res) => {
     const spotifyID = responseBody.spotifyID
 
     const date = req.query.q
-    //console.log("date: " + date)
 
     const db = getDatabase();
     const trackCollection = db.collection(spotifyID);
-    const track = await trackCollection.find({ date: date }).toArray;
+    const trackGivenDate = await trackCollection.find({ date: date }).toArray();
 
-    //console.log("track: " + track.length)
-
-    if (track.length === 0) {
+    if (trackGivenDate.length === 0) {
         res.json({track: null})
     } else {
-        res.json({track: track[0]})
+        res.json({track: trackGivenDate[0].track})
     }
 });
 

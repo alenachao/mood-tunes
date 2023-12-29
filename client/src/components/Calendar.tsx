@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Calendar from 'react-calendar'
 import { styled } from '@mui/material';
 import 'react-calendar/dist/Calendar.css'
@@ -9,6 +9,21 @@ import { useTheme } from '@mui/material/styles';
   export default function StyledComponents({dateState, setDateState}) {
     const theme = useTheme();
     const [tracksForMonth, setTracksForMonth] = useState([]);
+
+    // for when user goes to the next or previous month
+    const handleViewChange = ({ action, activeStartDate, value, view }) => {
+      var firstDayOfMonth = null;
+      if (action === 'next') {
+        // Update dateState to the first day of the new month
+        firstDayOfMonth = new Date(dateState.getFullYear(), dateState.getMonth() + 1, 1);
+      } else if (action === 'prev') {
+        firstDayOfMonth = new Date(dateState.getFullYear(), dateState.getMonth() - 1, 1);
+      }
+        setDateState(firstDayOfMonth);
+  
+        // Fetch tracks for the new month
+        fetchTracksForMonth(firstDayOfMonth);
+    };
 
     // get track given date, if no track then return null
     const getTrackForDate = async (date) => {
@@ -24,6 +39,7 @@ import { useTheme } from '@mui/material/styles';
       return responseBody.track;
     };
 
+    // get tracks for the whole month given date so we can simultaneously update calendar
     const fetchTracksForMonth = async (selectedDate) => {
       const firstDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
       const lastDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
@@ -44,17 +60,18 @@ import { useTheme } from '@mui/material/styles';
       const tracks = await Promise.all(trackPromises);
       setTracksForMonth(tracks);
     };
+
+    const memoizedFetchTracks = useCallback(() => {
+      fetchTracksForMonth(dateState);
+    }, [dateState]);
   
     useEffect(() => {
       if (dateState) {
-        fetchTracksForMonth(dateState).then((tracks) => {
-          // Process the fetched tracks as needed
-          fetchTracksForMonth(dateState);
-        });
+        memoizedFetchTracks();
       }
-    }, [dateState]);
+    }, [dateState, tracksForMonth]);
 
-    // if the user previously selected a tracks, load them onto the calendar
+    // if the user previously selected a tracks for the month, load them onto the calendar
     const tileContent = ({ date, view }) => {
       if (view === 'month') {
         const selectedDateISOString = date.toISOString().split('T')[0];
@@ -77,5 +94,5 @@ import { useTheme } from '@mui/material/styles';
         borderRadius: theme.shape.borderRadius,
     });
 
-    return <MyCalendar value={dateState} onChange={setDateState} tileContent={tileContent}/>;
+    return <MyCalendar value={dateState} onChange={setDateState} tileContent={tileContent} onActiveStartDateChange={handleViewChange}/>;
   }

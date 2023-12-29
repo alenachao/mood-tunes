@@ -59,6 +59,32 @@ export default function HomePage() {
 
     }, []);
 
+
+    // if there is already a track for the date, set state to "currently playing," else set state to search
+    useEffect(() => {
+
+        async function trackAvailable() {
+            const parameters = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'string',
+                },
+              };
+              const date = dateState.toISOString().split('T')[0]
+              const response = await fetch('/api/tracks/query?q=' + date, parameters);
+              const responseBody = await response.json();
+              if (responseBody.track) {
+                setSelectedTrack(responseBody.track);
+                setSearchState(false);
+              } else {
+                setSearchState(true);
+              }
+        }
+
+        trackAvailable();
+
+    }, [dateState]);
+
     return (
         <Container sx={{ py: 2, position: 'relative' }}>
             <Header />
