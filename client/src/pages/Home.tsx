@@ -25,20 +25,34 @@ export default function HomePage() {
       };
 
     // if user likes their pick they submit it where it will be shown on the calendar (TODO: added to database)
-    const handleSubmitButtonClick = () => {
+    const handleSubmitButtonClick = async () => {
         setCalendarTrack(selectedTrack);
         setSearchState(true);
 
-        // TODO: add dateState and track to database
+        // add dateState and track to database
+        const date = dateState.toISOString().split('T')[0];
+        var parameters = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({date, selectedTrack}),
+        }
+
+        await fetch('http://localhost:5173/api/tracks', parameters).then(response => response.json())
+            .then(data => {
+                // Log the response data on the client side
+                console.log('Server Response:', data);
+            })
     };
 
     // get token from backend
     useEffect(() => {
 
         async function getToken() {
-        const response = await fetch('/api/auth/token');
-        const json = await response.json();
-        setToken(json.access_token);
+            const response = await fetch('/api/auth/token');
+            const json = await response.json();
+            setToken(json.access_token);
         }
 
         getToken();

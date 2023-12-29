@@ -9,6 +9,7 @@ const router = express.Router();
 var client_id = process.env.REACT_APP_CLIENT_ID;
 var client_secret = process.env.REACT_APP_CLIENT_SECRET;
 global.access_token = ''
+global.spotifyID = '' // to make database querying easier
 
 // Have user log into a Spotify premium account to enable web playback (https://developer.spotify.com/documentation/web-playback-sdk)
 router.get('/authorize', (req, res) => {
@@ -66,6 +67,7 @@ router.get('/callback', async (req, res) => {
             const userResponse = await fetch('https://api.spotify.com/v1/me', userParameters);
 
             const userResponseBody = await userResponse.json();
+            spotifyID = userResponseBody.id;
 
             // Update Database
             var dbParameters = {
@@ -99,10 +101,14 @@ router.get('/callback', async (req, res) => {
 // Return access token
 router.get('/token', (req, res) => {
     res.json({ access_token: access_token})
-  })
+})
 
+// Return SpotifyID
+router.get('/id', (req, res) => {
+    res.json({ spotifyID: spotifyID})
+})
 
-// Handle user login: Checks if user is in database based on spotify id. if not found, add to database. if found, load previous song selections.
+// Checks if user is in database based on spotify id. if not found, add to database. if found, load previous song selections.
 router.post('/login', async (req, res) => {
     /* request sample:
             {
@@ -176,10 +182,10 @@ var generateRandomString = function (length) {
 };
 
 // Return if user already exists in database
-async function userExistsInDatabase(spotifyId) {
+async function userExistsInDatabase(id) {
     const db = getDatabase();
     const usersCollection = db.collection('users');
-    const user = await usersCollection.findOne({ spotifyId });
+    const user = await usersCollection.findOne({ spotifyID: id });
     return !!user; // Returns true if the user exists, false otherwise
 }
 
@@ -189,12 +195,5 @@ async function addUserToDatabase(userData) {
     const usersCollection = db.collection('users');
     await usersCollection.insertOne(userData);
 }
-
-// async function getPreviousSongSelections(spotifyId) {
-//     const db = getDatabase();
-//     const songsCollection = db.collection('songs');
-//     const previousSongs = await songsCollection.find({ userId: spotifyId }).toArray();
-//     return previousSongs;
-// }
   
 module.exports = router;
