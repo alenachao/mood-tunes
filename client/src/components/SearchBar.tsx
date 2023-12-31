@@ -3,7 +3,7 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { Typography, Stack, Container } from '@mui/material';
+import { Typography, Stack, Grid } from '@mui/material';
 import "@/assets/css/SearchBar.css";
 
 export default function Search({ onButtonClick }) {
@@ -28,39 +28,42 @@ export default function Search({ onButtonClick }) {
     }
 
     return (
-    //   <div
-    //     style={{
-    //       display: "flex",
-    //       alignSelf: "center",
-    //       justifyContent: "center",
-    //       flexDirection: "column",
-    //       padding: 20
-    //     }}
-    //   >
-        <Stack spacing={1}>
-            <form onSubmit={handleSubmit}>
-                <TextField
-                    id="search-bar"
-                    className="text"
-                    value={searchQuery}
-                    onInput={(e) => {
-                        setSearchQuery(((e.target as HTMLTextAreaElement)).value);
-                    }}
-                    label="Search..."
-                    variant="outlined"
-                    placeholder="Search..."
-                    size="small"
-                />
-                <IconButton type="submit" aria-label="search">
-                    <SearchIcon style={{ fill: "blue" }} />
-                </IconButton>
-            </form>
+        <Grid container spacing={1} alignItems="center" justifyContent="center">
+            <Grid item xs={10}>
+                <form onSubmit={handleSubmit} id="search-component">
+                    <TextField
+                        id="search-bar"
+                        className="text"
+                        value={searchQuery}
+                        onInput={(e) => {
+                            setSearchQuery(((e.target as HTMLTextAreaElement)).value);
+                        }}
+                        variant="outlined"
+                        placeholder="Search..."
+                        size="small"
+                        style={{width:'85%'}}
+                        InputProps={{
+                            style: {
+                              color: 'white',
+                            },
+                          }}
+                          InputLabelProps={{
+                            style: {
+                              color: 'black',
+                            },
+                        }}
+                    />
+
+                    <IconButton type="submit" aria-label="search">
+                        <SearchIcon style={{ fill: "#1DB954" }} />
+                    </IconButton>
+                </form>
+            </Grid>
             <Stack spacing={1}>
                 {tracks.map( (track, i) => {
                     return (
                         <Button 
                             key={i} 
-                            component="results" 
                             variant="contained" 
                             startIcon = { <img src={track.album.images[0].url}/> } 
                             className="leftAlignedButton" 
@@ -72,9 +75,6 @@ export default function Search({ onButtonClick }) {
                 })}
             </Stack> 
             
-        </Stack>
-
-    //     </div>
-    //   </div>
+        </Grid>
     );
 }
