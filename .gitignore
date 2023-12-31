@@ -34,3 +34,5 @@ client/.env.production
 server/.env
 server/.env.development
 server/.env.production
+
+*.mp4
