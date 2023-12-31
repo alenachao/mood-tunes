@@ -94,5 +94,5 @@ import { useTheme } from '@mui/material/styles';
         borderRadius: theme.shape.borderRadius,
     });
 
-    return <MyCalendar value={dateState} onChange={setDateState} tileContent={tileContent} onActiveStartDateChange={handleViewChange}/>;
+    return <Calendar value={dateState} onChange={setDateState} tileContent={tileContent} onActiveStartDateChange={handleViewChange}/>;
   }
