@@ -4,6 +4,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import {Stack} from '@mui/material'
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 
 export default function Header() {
@@ -38,8 +39,12 @@ export default function Header() {
                     Coming Soon: Spotify Stats, Mood Analysis, and Personal Playlists :)
                 </Typography>
                 <Button color="inherit" style={{textTransform:"none", fontSize:"16px"}}>
-                    { username }
-                    <img src={profilePicture}/>
+                    <Stack direction='row' spacing={2}>
+                        <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+                        { username }
+                        </Typography>
+                        <img src={profilePicture}/>
+                    </Stack>
                 </Button>
             </Toolbar>
         </AppBar>
