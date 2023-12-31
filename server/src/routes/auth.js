@@ -9,7 +9,9 @@ const router = express.Router();
 var client_id = process.env.REACT_APP_CLIENT_ID;
 var client_secret = process.env.REACT_APP_CLIENT_SECRET;
 global.access_token = ''
-global.spotifyID = '' // to make database querying easier
+global.spotifyID = ''
+global.username = ''
+global.pfp = ''
 
 // Have user log into a Spotify premium account to enable web playback (https://developer.spotify.com/documentation/web-playback-sdk)
 router.get('/authorize', (req, res) => {
@@ -68,6 +70,9 @@ router.get('/callback', async (req, res) => {
 
             const userResponseBody = await userResponse.json();
             spotifyID = userResponseBody.id;
+            username = userResponseBody.display_name
+            pfp = userResponseBody.images[0].url
+
 
             // Update Database
             var dbParameters = {
@@ -106,6 +111,14 @@ router.get('/token', (req, res) => {
 // Return SpotifyID
 router.get('/id', (req, res) => {
     res.json({ spotifyID: spotifyID})
+})
+
+// Return username and pfp url
+router.get('/user', (req, res) => {
+    res.json({ 
+        username: username,
+        pfp: pfp
+    })
 })
 
 // Checks if user is in database based on spotify id. if not found, add to database. if found, load previous song selections.

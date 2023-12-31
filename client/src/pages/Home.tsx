@@ -1,10 +1,11 @@
 import  React, {useState, useEffect} from 'react';
 import Calendar from '@/components/Calendar'
-import { Typography, Stack, Container, makeStyles } from '@mui/material';
+import { Typography, Stack, Container, Grid} from '@mui/material';
 import moment from 'moment'
 import Header from '@/components/Header';
 import SearchBar from '@/components/SearchBar';
 import WebPlayback from '@/components/WebPlayback'
+import Footer from '@/components/Footer';
 
 export default function HomePage() {
     const [dateState, setDateState] = useState(new Date()); // for calendar
@@ -86,12 +87,15 @@ export default function HomePage() {
     }, [dateState]);
 
     return (
-        <Container sx={{ py: 2, position: 'relative' }}>
+        <Container maxWidth={false} >
             <Header />
-                <Stack direction="row" spacing={10} justifyContent='center' margin="5em" >
+            <Grid container spacing={4} style={{padding:'0px'}} >
+                <Grid item xs={7}>
                     <Calendar dateState={dateState} setDateState={setDateState} track={calendarTrack}/>
-                    <Stack direction="column" >
-                        <Typography textAlign="center" variant="h1">
+                </Grid>
+                <Grid item xs={5}>
+                    <Stack direction="column" alignItems="center" spacing={1} style={{backgroundColor: '#141414', borderRadius: '10px', padding:'2em', height:'100%'}}>
+                        <Typography textAlign="center" variant="h2">
                             How do you feel today?
                         </Typography>
                         <Typography textAlign="center" variant="subtitle1">
@@ -107,8 +111,9 @@ export default function HomePage() {
                             </>
                         )}
                     </Stack>
-                </Stack>
-            <Header />
+                </Grid> 
+            </Grid>
+            <Footer />
         </Container>
     );
   }
