@@ -79,7 +79,9 @@ import { useTheme } from '@mui/material/styles';
         if (trackForSelectedDate) {
           if (trackForSelectedDate.track) {
             return (
-              <img src={trackForSelectedDate.track.album.images[0].url}/>
+              <div>
+                <img src={trackForSelectedDate.track.album.images[0].url} style={{borderRadius:"50%", marginLeft:'1em'}}/>
+              </div>       
             );
           }
         }

@@ -43,7 +43,7 @@ export default function Header() {
                         <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
                         { username }
                         </Typography>
-                        <img src={profilePicture}/>
+                        <img src={profilePicture} style={{borderRadius:"50%"}}/>
                     </Stack>
                 </Button>
             </Toolbar>
