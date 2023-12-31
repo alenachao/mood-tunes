@@ -1,6 +1,4 @@
 import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
-import { useAppSelector } from '@/app/store';
-import { PaletteMode } from '@mui/material';
 import * as React from 'react';
 type Props = {
   children?: React.ReactNode;
@@ -85,16 +83,14 @@ declare module '@mui/material/Typography' {
   }
 }
 export const AppThemeProvider: React.FC<Props> = ({ children }) => {
-  const mode = useAppSelector((state) => state.user.mode);
   const theme = responsiveFontSizes(
     createTheme({
       palette: {
-        mode: mode as PaletteMode,
         primary: {
-          main: '#1c9c7c',
+          main: '#141414', 
         },
         secondary: {
-          main: '#9DF3C4',
+          main: '#1DB954',
         },
         Ink: {
           Darkest: '#000000',
@@ -129,28 +125,28 @@ export const AppThemeProvider: React.FC<Props> = ({ children }) => {
           Lightest: '#E5FFE5',
         },
         background: {
-          default: mode === 'dark' ? '#000000' : '#FCFBFA',
-          opposite: mode === 'dark' ? '#FCFBFA' : '#000000',
-          paper: mode === 'dark' ? '#131313' : '#FCFCFC',
+          default: '#000000',
+          opposite: '#999999',
+          paper: '#C3C1BD',
         },
         text: {
-          primary: mode === 'dark' ? '#FFFFFF' : '#000000',
-          secondary: '#999999',
-          disabled: '#C3C1BD',
+          primary: '#FFFFFF',
+          secondary: '#000000',
+          disabled: '#FCFCFC',
         },
     
   
         grey: {
-          50: mode === 'dark' ? 'hsl(0, 0%, 10%)' : 'hsl(0, 5%, 95%)',
-          100: mode === 'dark' ? 'hsl(0, 0%, 20%)' : 'hsl(0, 0%, 90%)',
-          200: mode === 'dark' ? 'hsl(0, 0%, 30%)' : 'hsl(0, 0%, 80%)',
-          300: mode === 'dark' ? 'hsl(0, 0%, 40%)' : 'hsl(0, 0%, 70%)',
-          400: mode === 'dark' ? 'hsl(0, 0%, 50%)' : 'hsl(0, 0%, 60%)',
-          500: mode === 'dark' ? 'hsl(0, 0%, 60%)' : 'hsl(0, 0%, 50%)',
-          600: mode === 'dark' ? 'hsl(0, 0%, 70%)' : 'hsl(0, 0%, 40%)',
-          700: mode === 'dark' ? 'hsl(0, 0%, 80%)' : 'hsl(0, 0%, 30%)',
-          800: mode === 'dark' ? 'hsl(0, 0%, 90%)' : 'hsl(0, 0%, 20%)',
-          900: mode === 'dark' ? 'hsl(0, 5%, 95%)' : 'hsl(0, 0%, 10%)',
+          50: 'hsl(0, 5%, 95%)',
+          100: 'hsl(0, 0%, 90%)',
+          200: 'hsl(0, 0%, 80%)',
+          300: 'hsl(0, 0%, 70%)',
+          400: 'hsl(0, 0%, 60%)',
+          500: 'hsl(0, 0%, 50%)',
+          600: 'hsl(0, 0%, 40%)',
+          700: 'hsl(0, 0%, 30%)',
+          800: 'hsl(0, 0%, 20%)',
+          900: 'hsl(0, 0%, 10%)',
         },
         gradient: {
           bronze: 'linear-gradient(180deg, #9C6D3E 0%, #E8C8A9 100%)',
@@ -160,36 +156,41 @@ export const AppThemeProvider: React.FC<Props> = ({ children }) => {
       },
 
       typography: {
-        fontFamily: 'Dosis, sans-serif',
+        fontFamily: 'Lato, sans-serif',
 
         h1: {
-          fontSize: '26px',
+          fontSize: '48px',
           fontWeight: '600',
           // lineHeight: '33px',
         },
         h2: {
-          fontSize: '22px',
+          fontSize: '36px',
           fontWeight: '600',
           // lineHeight: '28px',
         },
         h3: {
-          fontSize: '20px',
+          fontSize: '30px',
           fontWeight: '600',
           // lineHeight: '25px',
         },
         h4: {
-          fontSize: '18px',
+          fontSize: '24px',
           fontWeight: '600',
           // lineHeight: '23px',
         },
         h5: {
+          fontSize: '18px',
+          fontWeight: '500',
+          // lineHeight: '20px',
+        },
+        h6: {
           fontSize: '16px',
           fontWeight: '500',
           // lineHeight: '20px',
         },
 
         CTA1: {
-          fontSize: '28px',
+          fontSize: '36px',
           fontWeight: '500',
           // lineHeight: '35px',
         },
@@ -206,19 +207,19 @@ export const AppThemeProvider: React.FC<Props> = ({ children }) => {
         Body1: {
           fontFamily: 'Lato, sans-serif',
           fontSize: '14px',
-          fontWeight: '400',
+          fontWeight: '200',
           // lineHeight: '18px',
         },
         Body2: {
           fontFamily: 'Lato, sans-serif',
           fontSize: '13px',
-          fontWeight: '400',
+          fontWeight: '200',
           // lineHeight: '16px',
         },
         Body3: {
           fontFamily: 'Lato, sans-serif',
           fontSize: '12px',
-          fontWeight: '400',
+          fontWeight: '200',
           // lineHeight: '14px',
         },
         Body1Medium: {
@@ -249,6 +250,7 @@ export const AppThemeProvider: React.FC<Props> = ({ children }) => {
           styleOverrides: {
             body: {
               // ---CSS BODY--- \\
+              color: '#FFFFFF',
             },
           },
         },
