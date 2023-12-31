@@ -1,6 +1,6 @@
 import  React, {useState, useEffect} from 'react';
 import Calendar from '@/components/Calendar'
-import { Typography, Stack, Container, Grid} from '@mui/material';
+import { Typography, Stack, Container, Grid, Button} from '@mui/material';
 import moment from 'moment'
 import Header from '@/components/Header';
 import SearchBar from '@/components/SearchBar';
@@ -94,21 +94,30 @@ export default function HomePage() {
                     <Calendar dateState={dateState} setDateState={setDateState} track={calendarTrack}/>
                 </Grid>
                 <Grid item xs={5}>
-                    <Stack direction="column" alignItems="center" spacing={1} style={{backgroundColor: '#141414', borderRadius: '10px', padding:'2em', height:'100%'}}>
-                        <Typography textAlign="center" variant="h2">
+                    <Stack direction="column" alignItems="center" spacing={2} style={{backgroundColor: '#141414', borderRadius: '10px', padding:'2em', height:'100%'}}>
+                        <Typography textAlign="center" variant="h2" style={{color:"#1DB954"}}>
                             How do you feel today?
                         </Typography>
-                        <Typography textAlign="center" variant="subtitle1">
+                        <Typography textAlign="center" variant="h5">
                             {moment(dateState).format('MMMM Do YYYY')}
                         </Typography>
                         {searchState ? (
                             <SearchBar onButtonClick={handleSearchButtonClick} />
                         ) : (
-                            <>
-                            <button onClick={handleBackButtonClick}>Back</button>
-                            <button onClick={handleSubmitButtonClick}>Submit</button>
-                            <WebPlayback token={token} selectedTrack={selectedTrack} />
-                            </>
+                            <Stack direction="column" alignItems="center" textAlign="center" spacing={2} style={{width:"80%"}}>
+                                <Typography textAlign="center" variant="subtitle1">
+                                    Current Selection: <span style={{color:"#1DB954"}}>{selectedTrack.name} by {selectedTrack.artists[0].name}</span>
+                                </Typography>
+                                <WebPlayback token={token} selectedTrack={selectedTrack} />
+                                <Grid container spacing={1} textAlign="center">
+                                    <Grid item xs={6}>
+                                        <Button color="inherit" onClick={handleBackButtonClick} style={{color:"white", textTransform:"none", width:"100%"}}>Go back and select a new song</Button>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Button color="inherit" onClick={handleSubmitButtonClick} style={{color:"white", textTransform:"none",width:"100%", height:"100%"}} >Confirm song</Button>
+                                    </Grid>
+                                </Grid>
+                            </Stack>
                         )}
                     </Stack>
                 </Grid> 

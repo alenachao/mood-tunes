@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {Button} from '@mui/material'
 
 function WebPlayback(props) {
 
@@ -57,7 +58,7 @@ function WebPlayback(props) {
             <>
                 <div className="container">
                     <div className="main-wrapper">
-                        <b> Instance not active. Transfer your playback using your Spotify app </b>
+                        <b> Webplayer is not active. Make sure you are logged into a Spotify premium account. Transfer your playback using your Spotify app to start listening</b>
                     </div>
                 </div>
             </>)
@@ -77,15 +78,14 @@ function WebPlayback(props) {
                     <div className="container">
                         <div className="main-wrapper">
 
-                            <img src={props.selectedTrack.album.images[0].url} className="now-playing__cover" alt="" />
+                            
 
                             <div className="now-playing__side">
-                                <div className="now-playing__name">{props.selectedTrack.name}</div>
-                                <div className="now-playing__artist">{props.selectedTrack.artists[0].name}</div>
-
-                                <button className="btn-spotify" onClick={() => { player.togglePlay() }} >
+                                
+                                <Button className="btn-spotify" color="inherit" onClick={() => { player.togglePlay() }} style={{color:"white", textTransform:"none"}}>
+                                    <img src={props.selectedTrack.album.images[0].url} className="now-playing__cover" alt="" style={{borderRadius:"50%", marginRight:"1em"}}/>
                                     { is_paused ? "PLAY" : "PAUSE" }
-                                </button>
+                                </Button>
 
                             </div>
                         </div>
