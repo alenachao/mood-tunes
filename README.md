@@ -1,5 +1,5 @@
 # Mood Tunes
-Log your daily emotions through songs! This web appliction uses:
+Log your daily emotions through songs 🙂 This web appliction uses:
 - TypeScript + React + Redux + MUI + RRD + ESLint + Prettier (from [vite-mui-ts boilerplate](https://github.com/emre-cil/vite-mui-ts)) for client side code
 - Node + Express for server side code
 - MongoDB for database management 
