@@ -1,4 +1,4 @@
-# Mood Tunes
+# Mood Tunes 📻
 Log your daily emotions through songs 🙂 This web appliction uses:
 - TypeScript + React + Redux + MUI + RRD + ESLint + Prettier (from [vite-mui-ts boilerplate](https://github.com/emre-cil/vite-mui-ts)) for client side code
 - Node + Express for server side code
@@ -7,7 +7,7 @@ Log your daily emotions through songs 🙂 This web appliction uses:
 
 ![](https://github.com/alenachao/mood-tunes/blob/main/read-me-demo.gif)
 
-# Getting Started
+# Getting Started 📄
 ## 1. Clone Repo
 ``` 
 git clone git@github.com:alenachao/mood-tunes.git
