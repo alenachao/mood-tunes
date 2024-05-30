@@ -85,4 +85,14 @@
     background-color: #1DB954 !important;
     border-radius:10px !important;
   }
-  
+
+  /* Add this to your Calendar.css */
+.react-calendar__tile[disabled] {
+  background-color: transparent;
+  /* color: #ccc; */
+  pointer-events: none;
+}
+
+.react-calendar__tile[disabled]:hover {
+  background-color: transparent;
+}
