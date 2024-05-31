@@ -1,13 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Create AuthContext
 const AuthContext = createContext();
 
 interface AuthContextType {
     isAuthenticated: boolean;
 }
 
-// AuthProvider Component
 export const AuthProvider = ({ children }) => {
     const isAuthenticated = getToken();
 
@@ -30,7 +28,6 @@ export const AuthProvider = ({ children }) => {
         ;
     }
 
-
     return (
         <AuthContext.Provider value={{ isAuthenticated }}>
             {children}
@@ -38,5 +35,4 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-// Custom hook to use auth context
 export const useAuth = () => useContext(AuthContext);
