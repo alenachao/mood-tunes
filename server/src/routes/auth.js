@@ -16,16 +16,16 @@ global.pfp = ''
 // Have user log into a Spotify premium account to enable web playback (https://developer.spotify.com/documentation/web-playback-sdk)
 router.get('/authorize', (req, res) => {
     
-    var scope = "streaming user-read-email user-read-private"
-    var state = generateRandomString(16);
+    const scope = "streaming user-read-email user-read-private"
+    const state = generateRandomString(16);
     
     // Login and redirect
-    var auth_query_parameters = new URLSearchParams({
-    response_type: "code",
-    client_id: client_id,
-    scope: scope,
-    redirect_uri: "http://localhost:5173/api/auth/callback",
-    state: state
+    const auth_query_parameters = new URLSearchParams({
+        response_type: "code",
+        client_id: client_id,
+        scope: scope,
+        redirect_uri: "http://localhost:5173/api/auth/callback",
+        state: state
     })
 
     res.redirect('https://accounts.spotify.com/authorize/?' + auth_query_parameters.toString());
@@ -34,72 +34,81 @@ router.get('/authorize', (req, res) => {
 // After user logs in, turn authorization code into access token
 router.get('/callback', async (req, res) => {
     const code = req.query.code;
+    const state = req.query.state;
 
-    // Prepare the data for the POST request
-    const postData = querystring.stringify({
-        code: code,
-        redirect_uri: 'http://localhost:5173/api/auth/callback',
-        grant_type: 'authorization_code'
-    });
+    if (state === null) {
+        res.redirect('/#' +
+          querystring.stringify({
+            error: 'state_mismatch'
+          }));
+      } else {
 
-    const options = {
-        method: 'POST',
-        headers: {
-        'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64')),
-        'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: postData
-    };
+        // Prepare the data for the POST request
+        const postData = querystring.stringify({
+            code: code,
+            redirect_uri: 'http://localhost:5173/api/auth/callback',
+            grant_type: 'authorization_code'
+        });
 
-    try {
-        const response = await fetch('https://accounts.spotify.com/api/token', options);
+        const options = {
+            method: 'POST',
+            headers: {
+            'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64')),
+            'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: postData
+        };
 
-        if (response.ok) {
-            const responseBody = await response.json();
-            access_token = responseBody.access_token;
-            // Get user info
-            var userParameters = {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + access_token,
-                    'Content-Type': 'application/json'
+        try {
+            const response = await fetch('https://accounts.spotify.com/api/token', options);
+
+            if (response.ok) {
+                const responseBody = await response.json();
+                access_token = responseBody.access_token;
+                // Get user info
+                var userParameters = {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + access_token,
+                        'Content-Type': 'application/json'
+                    }
                 }
+                
+                const userResponse = await fetch('https://api.spotify.com/v1/me', userParameters);
+
+                const userResponseBody = await userResponse.json();
+                spotifyID = userResponseBody.id;
+                username = userResponseBody.display_name
+                pfp = userResponseBody.images[0].url
+
+
+                // Update Database
+                var dbParameters = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userResponseBody),
+                }
+
+                await fetch('http://localhost:8080/api/auth/login', dbParameters).then(response => response.json())
+                .then(data => {
+                    // Log the response data on the client side
+                    console.log('Server Response:', data);
+                    res.redirect('/');
+                })
+                .catch(error => {
+                console.error('Error:', error);
+                });
+
+            } else {
+                console.error(`Error: ${response.statusText}`);
+                res.status(response.status).send('Error during authentication');
             }
-            
-            const userResponse = await fetch('https://api.spotify.com/v1/me', userParameters);
-
-            const userResponseBody = await userResponse.json();
-            spotifyID = userResponseBody.id;
-            username = userResponseBody.display_name
-            pfp = userResponseBody.images[0].url
-
-
-            // Update Database
-            var dbParameters = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userResponseBody),
-            }
-
-            await fetch('http://localhost:8080/api/auth/login', dbParameters).then(response => response.json())
-            .then(data => {
-                // Log the response data on the client side
-                console.log('Server Response:', data);
-                res.redirect('/home');
-            })
-            .catch(error => {
-              console.error('Error:', error);
-            });
-
-        } else {
-            console.error(`Error: ${response.statusText}`);
-            res.status(response.status).send('Error during authentication');
+        } catch (error) {
+            console.error(`Error: ${error.message}`);
+            res.status(500).send('Internal Server Error');
         }
-    } catch (error) {
-        console.error(`Error: ${error.message}`);
-        res.status(500).send('Internal Server Error');
     }
 })
 

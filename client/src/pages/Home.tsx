@@ -1,4 +1,5 @@
 import  React, {useState, useEffect} from 'react';
+import { useNavigate } from "react-router-dom";
 import Calendar from '@/components/Calendar'
 import { Typography, Stack, Container, Grid, Button} from '@mui/material';
 import moment from 'moment'
@@ -12,7 +13,8 @@ export default function HomePage() {
     const [token, setToken] = useState(''); // for spotify api
     const [selectedTrack, setSelectedTrack] = useState(null); // to set track for webplayer, change when track is selected from search
     const [searchState, setSearchState] = useState(true); // to flip between search bar and webplayer
-    const [calendarTrack, setCalendarTrack] = useState(null) // to set track for calendar, change when track is submitted
+    const [calendarTrack, setCalendarTrack] = useState(null); // to set track for calendar, change when track is submitted
+    const navigate = useNavigate();
 
     
     const handleSearchButtonClick = (track) => {
