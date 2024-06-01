@@ -18,19 +18,18 @@ export default function Header() {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
-        
 
-        // Open the logout URL in a new tab
+        // open the logout URL in a new tab
         const newTab = window.open('https://accounts.spotify.com/en/logout', '_blank');
 
-        // Close the new tab after a short delay
+        // close the new tab after a short delay
         setTimeout(() => {
             newTab.close();
             // Redirect the current tab to the login page
             window.location.href = '/login';
         }, 1000); // Adjust the delay as needed
 
-        // Close the menu
+        // close the menu
         setAnchorEl(null);
     };
 

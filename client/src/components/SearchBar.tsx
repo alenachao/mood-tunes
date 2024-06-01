@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, } from "react";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { Typography, Stack, Grid } from '@mui/material';
+import { Stack, Grid } from '@mui/material';
 import "@/assets/css/SearchBar.css";
 
 export default function Search({ onButtonClick }) {

@@ -27,7 +27,7 @@ export default function HomePage() {
         setSearchState(true);
       };
 
-    // if user likes their pick they submit it where it will be shown on the calendar (TODO: added to database)
+    // if user likes their pick they submit it where it will be shown on the calendar
     const handleSubmitButtonClick = async () => {
         setCalendarTrack(selectedTrack);
         setSearchState(true);
@@ -44,7 +44,6 @@ export default function HomePage() {
 
         await fetch('http://localhost:5173/api/tracks/store', parameters).then(response => response.json())
             .then(data => {
-                // Log the response data on the client side
                 console.log('Server Response:', data);
             })
     };

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
 import LoginPage from '@/pages/Login';
 
 const PrivateRoute = ({ component: Component }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(null); // Initially set to null
-    const [loading, setLoading] = useState(true); // Loading state
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
+    const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
         async function getToken() {
@@ -22,7 +21,7 @@ const PrivateRoute = ({ component: Component }) => {
                 console.error('Error fetching token:', error);
                 setIsAuthenticated(false);
             } finally {
-                setLoading(false); // Set loading state to false after fetching token
+                setLoading(false);
             }
         }
 
@@ -30,7 +29,7 @@ const PrivateRoute = ({ component: Component }) => {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>; // Render loading state until authentication status is determined
+        return <div>Loading...</div>;
     }
 
     return (isAuthenticated ? <Component /> : <LoginPage />);

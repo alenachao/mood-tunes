@@ -1,13 +1,9 @@
-import * as React from 'react';
-import { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import "@/assets/css/Calendar.css";
-import { useTheme } from '@mui/material/styles';
-
 
 export default function StyledComponents({dateState, setDateState}) {
-  const theme = useTheme();
   const [tracksForMonth, setTracksForMonth] = useState([]);
 
   // for when user goes to the next or previous month
@@ -61,15 +57,9 @@ export default function StyledComponents({dateState, setDateState}) {
     setTracksForMonth(tracks);
   };
 
-  const memoizedFetchTracks = useCallback(() => {
-    fetchTracksForMonth(dateState);
-  }, [dateState]);
-
   useEffect(() => {
-    if (dateState) {
-      memoizedFetchTracks();
-    }
-  }, [dateState, tracksForMonth]);
+      fetchTracksForMonth(dateState);
+  }, []);
 
   // if the user previously selected a tracks for the month, load them onto the calendar
   const tileContent = ({ date, view }) => {
