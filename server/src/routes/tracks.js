@@ -6,31 +6,41 @@ const { getDatabase } = require('../db');
 const router = express.Router();
 
 // Store date-track object into collection corresponding to user's SpotifyID
+// also store valence in track object to be used for analysis
 router.post("/store", async (req, res) => {
-    const response = await fetch('http://localhost:8080/api/auth/id');
-    const responseBody = await response.json();
-    const spotifyID = responseBody.spotifyID
-    const date = req.body.date
-    const track = req.body.selectedTrack
+    const { date, selectedTrack } = req.body;
+
+    const [idResponse, tokenResponse] = await Promise.all([
+        fetch('http://localhost:8080/api/auth/id'),
+        fetch('http://localhost:8080/api/auth/token')
+    ]);
+    
+    const { spotifyID } = await idResponse.json();
+    const { token } = await tokenResponse.json();
+
+    var parameters = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    }
+    const valenceResponse = await fetch('https://api.spotify.com/v1/audio-features/' + selectedTrack.id, parameters);
+    const { valence } = await valenceResponse.json();
+    selectedTrack.valence = valence 
 
     const db = getDatabase();
     const trackCollection = db.collection(spotifyID); // there is a song collection for each user based on their spotifyid
-    const dateExists = await trackCollection.findOne({ date: date });
-
-    if (!dateExists) { // if we do not have a song for that date yet then we will add it to the collection
-        await trackCollection.insertOne({ 
-            date: date,
-            track: track}).then(response => {
-            res.json({ message: 'Track added to the database.' });
-        });
-    } else { // if it does exist, update the database with the new song
-        await trackCollection.updateOne(
-            { date: date },
-            { $set: { track: track } }
-        ).then(response => {
-            res.json({ message: 'Track updated in the database.' });
-        });
-    }
+    await trackCollection.updateOne(
+        { date },
+        {
+            $set: {
+                track: selectedTrack
+            }
+        },
+        { upsert: true }
+    );
+    res.json({ message: 'Track stored in the database.' });
 });
 
 // Retrieve track given date if it exists, null otherwise
