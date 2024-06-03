@@ -10,9 +10,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 export default function Header() {
-   const [username, setUsername] = useState("");
-   const [profilePicture, setProfilePicture] = useState("")
-   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [username, setUsername] = useState("");
+    const [profilePicture, setProfilePicture] = useState("")
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);

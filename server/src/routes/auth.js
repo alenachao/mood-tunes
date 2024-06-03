@@ -16,7 +16,7 @@ global.pfp = ''
 // Have user log into a Spotify premium account to enable web playback (https://developer.spotify.com/documentation/web-playback-sdk)
 router.get('/authorize', (req, res) => {
     
-    const scope = "streaming user-read-email user-read-private"
+    const scope = "streaming user-read-email user-read-private playlist-modify-public playlist-modify-private"
     const state = generateRandomString(16);
     
     // Login and redirect
@@ -64,7 +64,7 @@ router.get('/callback', async (req, res) => {
 
             if (response.ok) {
                 const responseBody = await response.json();
-                access_token = responseBody.access_token;
+                global.access_token = responseBody.access_token;
                 // Get user info
                 var userParameters = {
                     method: 'GET',
@@ -114,19 +114,19 @@ router.get('/callback', async (req, res) => {
 
 // Return access token
 router.get('/token', (req, res) => {
-    res.json({ access_token: access_token})
+    res.json({ access_token: global.access_token})
 })
 
 // Return SpotifyID
 router.get('/id', (req, res) => {
-    res.json({ spotifyID: spotifyID})
+    res.json({ spotifyID: global.spotifyID})
 })
 
 // Return username and pfp url
 router.get('/user', (req, res) => {
     res.json({ 
-        username: username,
-        pfp: pfp
+        username: global.username,
+        pfp: global.pfp
     })
 })
 
@@ -163,19 +163,17 @@ router.post('/login', async (req, res) => {
             }
     */
 
-    // interested in display_name, id, href, images, product
-    // console.log(req.body)
     spotifyID = req.body.id
     username = req.body.display_name
     apiEndpoint = req.body.href
     profilePicture = req.body.images[0].url
     accountType = req.body.product
 
-    // Check if the user exists in the database
+    // check if the user exists in the database
     const userExists = await userExistsInDatabase(spotifyID);
 
     if (!userExists) {
-        // User doesn't exist, add them to the database
+        // user doesn't exist, add them to the database
         await addUserToDatabase({
             spotifyID : spotifyID,
             username : username, 
@@ -184,8 +182,7 @@ router.post('/login', async (req, res) => {
             accountType: accountType});
         res.json({ message: 'User added to the database.' });
     } else {
-        // User exists, query previous song selections
-        //const previousSongs = await getPreviousSongSelections(spotifyId);
+        // user exists
         res.json({ message: 'User found in the database.' });
     }
 });

@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import SearchBar from '@/components/SearchBar';
 import WebPlayback from '@/components/WebPlayback'
 import Footer from '@/components/Footer';
+import Stats from '@/components/Stats';
 
 export default function HomePage() {
     const [dateState, setDateState] = useState(new Date()); // for calendar
@@ -123,6 +124,7 @@ export default function HomePage() {
                     </Stack>
                 </Grid> 
             </Grid>
+            <Stats />
             <Footer />
         </Container>
     );

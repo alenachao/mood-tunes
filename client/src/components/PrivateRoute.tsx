@@ -10,8 +10,6 @@ const PrivateRoute = ({ component: Component }) => {
             try {
                 const response = await fetch('/api/auth/token');
                 const json = await response.json();
-                console.log(json.access_token);
-
                 if (json.access_token) {
                     setIsAuthenticated(true);
                 } else {

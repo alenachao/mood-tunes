@@ -59,7 +59,7 @@ export default function StyledComponents({dateState, setDateState}) {
 
   useEffect(() => {
       fetchTracksForMonth(dateState);
-  }, []);
+  }, [dateState]);
 
   // if the user previously selected a tracks for the month, load them onto the calendar
   const tileContent = ({ date, view }) => {
