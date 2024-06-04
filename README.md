@@ -1,11 +1,17 @@
 # Mood Tunes 📻
-Log your daily emotions through songs 🙂 This web appliction uses:
+Log your daily emotions through songs 🙂
+- Select one song each day that describes your mood
+- See which days/songs correlated to more negative/positive emotions and how they were distributed over the month
+- Export playlist of tracks each month \
+![](https://github.com/alenachao/mood-tunes/blob/main/read-me-demo.gif)
+![image](https://github.com/alenachao/mood-tunes/assets/122919697/45fd0006-055f-4cf3-aaf2-a76ea3ccb393)
+![image](https://github.com/alenachao/mood-tunes/assets/122919697/a85690e6-85b8-4f33-8260-2e8d3fe22acf)
+
+This appliction uses:
 - TypeScript + React + Redux + MUI + RRD + ESLint + Prettier (from [vite-mui-ts boilerplate](https://github.com/emre-cil/vite-mui-ts)) for client side code
 - Node + Express for server side code
 - MongoDB for database management 
-- [Spotify Web API](https://developer.spotify.com/) to authenticate user, search songs, and play selections back to the user
-
-![](https://github.com/alenachao/mood-tunes/blob/main/read-me-demo.gif)
+- [Spotify Web API](https://developer.spotify.com/) to authenticate user and implement song related features
 
 # Getting Started 📄
 ## 1. Clone Repo
