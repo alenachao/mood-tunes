@@ -1,5 +1,4 @@
 import  React, {useState, useEffect} from 'react';
-import { useNavigate } from "react-router-dom";
 import Calendar from '@/components/Calendar'
 import { Typography, Stack, Container, Grid, Button} from '@mui/material';
 import moment from 'moment'
@@ -15,9 +14,8 @@ export default function HomePage() {
     const [selectedTrack, setSelectedTrack] = useState(null); // to set track for webplayer, change when track is selected from search
     const [searchState, setSearchState] = useState(true); // to flip between search bar and webplayer
     const [calendarTrack, setCalendarTrack] = useState(null); // to set track for calendar, change when track is submitted
-    const navigate = useNavigate();
+    const today = new Date();
 
-    
     const handleSearchButtonClick = (track) => {
         setSelectedTrack(track); // after a track is selected from search, we will set it as track to play on webplayer
         setSearchState(false); // we will also replace search results with webplayer
@@ -104,21 +102,27 @@ export default function HomePage() {
                             {moment(dateState).format('MMMM Do YYYY')}
                         </Typography>
                         {searchState ? (
-                            <SearchBar onButtonClick={handleSearchButtonClick} />
+                            dateState.getMonth() == today.getMonth() ? (
+                                <SearchBar onButtonClick={handleSearchButtonClick} />
+                            ) : ( <></> )
+                            
                         ) : (
                             <Stack direction="column" alignItems="center" textAlign="center" spacing={2} style={{width:"80%"}}>
                                 <Typography textAlign="center" variant="subtitle1">
                                     Current Selection: <span style={{color:"#1DB954"}}>{selectedTrack.name} by {selectedTrack.artists[0].name}</span>
                                 </Typography>
                                 <WebPlayback token={token} selectedTrack={selectedTrack} />
-                                <Grid container spacing={1} textAlign="center">
-                                    <Grid item xs={6}>
-                                        <Button color="inherit" onClick={handleBackButtonClick} style={{color:"white", textTransform:"none", width:"100%"}}>Go back and select a new song</Button>
+                                { dateState.getMonth() == today.getMonth() ? (
+                                    <Grid container spacing={1} textAlign="center">
+                                        <Grid item xs={6}>
+                                            <Button color="inherit" onClick={handleBackButtonClick} style={{color:"white", textTransform:"none", width:"100%"}}>Go back and select a new song</Button>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Button color="inherit" onClick={handleSubmitButtonClick} style={{color:"white", textTransform:"none",width:"100%", height:"100%"}} >Confirm song</Button>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={6}>
-                                        <Button color="inherit" onClick={handleSubmitButtonClick} style={{color:"white", textTransform:"none",width:"100%", height:"100%"}} >Confirm song</Button>
-                                    </Grid>
-                                </Grid>
+                                ) : ( <></> )}
+                                
                             </Stack>
                         )}
                     </Stack>

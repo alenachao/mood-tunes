@@ -3,7 +3,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import "@/assets/css/Calendar.css";
 
-export default function StyledComponents({dateState, setDateState}) {
+export default function StyledComponents({dateState, setDateState, track}) {
   const [tracksForMonth, setTracksForMonth] = useState([]);
 
   // for when user goes to the next or previous month
@@ -37,8 +37,8 @@ export default function StyledComponents({dateState, setDateState}) {
 
   // get tracks for the whole month given date so we can simultaneously update calendar
   const fetchTracksForMonth = async (selectedDate) => {
-    const firstDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-    const lastDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
+    const firstDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1);
+    const lastDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 2, 0);
 
     const daysInMonth = [];
     let currentDate = firstDayOfMonth;
@@ -59,7 +59,7 @@ export default function StyledComponents({dateState, setDateState}) {
 
   useEffect(() => {
       fetchTracksForMonth(dateState);
-  }, [dateState]);
+  }, [dateState, track]);
 
   // if the user previously selected a tracks for the month, load them onto the calendar
   const tileContent = ({ date, view }) => {

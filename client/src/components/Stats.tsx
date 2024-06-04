@@ -1,7 +1,4 @@
 import React, { useState, useEffect} from "react";
-import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Stack, Grid } from '@mui/material';
 import { BarChart } from '@mui/x-charts/BarChart';
@@ -14,10 +11,8 @@ import ListItemText from '@mui/material/ListItemText';
 export default function Stats() {
     const [tracksForMonth, setTracksForMonth] = useState([]);
     const dateState = new Date();
-    // const year = dateState.getFullYear()
     const firstDayOfMonth = new Date(dateState.getFullYear(), dateState.getMonth() - 1, 1);
     const lastDayOfMonth = new Date(dateState.getFullYear(), dateState.getMonth(), 0);
-    // const month = firstDayOfMonth.toLocaleString('default', { month: 'long' });
 
     // get track given date, if no track then return null
     const getTrackForDate = async (date) => {
