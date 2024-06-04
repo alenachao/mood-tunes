@@ -26,7 +26,6 @@ router.post("/store", async (req, res) => {
         }
     }
     const valenceResponse = await fetch('https://api.spotify.com/v1/audio-features/' + selectedTrack.id, parameters);
-    // console.log(valenceResponse)
     const { valence } = await valenceResponse.json();
     selectedTrack.valence = valence; 
 
@@ -109,11 +108,6 @@ router.post("/playlist", async (req, res) => {
     }
 
     const addPlaylistResponse = await fetch(`https://api.spotify.com/v1/playlists/${id}/tracks`, addOptions);
-    console.log(responseBody);
-    console.log(id);
-    console.log(createPlaylistResponse);
-    console.log(addPlaylistResponse);
-
 
 });
 

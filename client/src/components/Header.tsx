@@ -58,7 +58,7 @@ export default function Header() {
                     <SentimentSatisfiedAltIcon style={{ fill: "#1DB954" }} />
                 </IconButton>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Coming Soon: Spotify Stats, Mood Analysis, and Personal Playlists :)
+                    
                 </Typography>
                 <div>
                     <Button

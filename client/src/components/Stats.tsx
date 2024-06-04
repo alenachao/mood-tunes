@@ -5,9 +5,19 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Stack, Grid } from '@mui/material';
 import { BarChart } from '@mui/x-charts/BarChart';
+import moment from 'moment'
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 
 export default function Stats() {
     const [tracksForMonth, setTracksForMonth] = useState([]);
+    const dateState = new Date();
+    // const year = dateState.getFullYear()
+    const firstDayOfMonth = new Date(dateState.getFullYear(), dateState.getMonth() - 1, 1);
+    const lastDayOfMonth = new Date(dateState.getFullYear(), dateState.getMonth(), 0);
+    // const month = firstDayOfMonth.toLocaleString('default', { month: 'long' });
 
     // get track given date, if no track then return null
     const getTrackForDate = async (date) => {
@@ -25,9 +35,7 @@ export default function Stats() {
 
     // get tracks for the previous month
     const fetchTracksForPrevMonth = async () => {
-        const dateState = new Date();
-        const firstDayOfMonth = new Date(dateState.getFullYear(), dateState.getMonth() - 1, 1);
-        const lastDayOfMonth = new Date(dateState.getFullYear(), dateState.getMonth(), 0);
+        
 
         const daysInMonth = [];
         let currentDate = firstDayOfMonth;
@@ -98,7 +106,7 @@ export default function Stats() {
     const handleClick = async () => {
         const validTracks = tracksForMonth.filter(({ track }) => track);
         const body = JSON.stringify({
-            playlistName: "test1",
+            playlistName: moment(firstDayOfMonth).format('MMMM YYYY'),
             tracks: validTracks
         })
         const parameters = {
@@ -112,50 +120,66 @@ export default function Stats() {
         const response = await fetch('/api/tracks/playlist', parameters);
     }
 
+    const validTracks = tracksForMonth.filter(({ track }) => track);
+
     return (
-        // <Grid container spacing={1} alignItems="center" justifyContent="center">
-        //     <Stack spacing={1}>
-        //         {tracks.map( (track, i) => {
-        //             return (
-        //                 <Button 
-        //                     key={i} 
-        //                     variant="contained" 
-        //                     startIcon = { <img src={track.album.images[0].url}/> } 
-        //                     className="leftAlignedButton" 
-        //                 >
-        //                     <span style={{ textTransform: 'none' }}> { track.name } <br /> { track.artists[0].name } <br /> valence: {track.valence} </span>
-        //                 </Button>
-        //             )
-        //         })}
-        //     </Stack> 
+        validTracks.length < 10 ? 
+        <Stack direction="row" alignItems="flex-start" justifyContent='center' spacing={2} style={{backgroundColor: '#141414', borderRadius: '10px', padding:'2em', height:'100%', marginTop: '2em'}}>
+            <h3>You need to log at least 10 songs in a month to get its statistics and export the songs into a playlist. Be sure to log at least 10 this month so you can see your results at the end!</h3>
+        </Stack>
+        :
+        <Stack direction="row" alignItems="flex-start" justifyContent='center' spacing={2} style={{backgroundColor: '#141414', borderRadius: '10px', padding:'2em', height:'100%', marginTop: '2em'}}>
+            <Stack direction="column" alignItems="center">
+                <h2>Moods for {moment(firstDayOfMonth).format('MMMM YYYY')} </h2>
+                <BarChart
+                        dataset={ data }
+                        xAxis={[{ dataKey: 'category', scaleType: 'band'}]}
+                        yAxis={[{label:'Count'}]}
+                        series={[{ dataKey: 'count', color: '#1DB954'}]}
+                        width={500}
+                        height={300}
+                />
+            </Stack>
+            <Stack direction="column" alignItems="center" spacing={2}>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                    <Stack direction="column" alignItems="center"  spacing={2}>
+                        <h2>Top 5 Happiest Tracks</h2>
+                        <List>
+                            {top5Tracks.map(({ track }, index) => (
+                                    <ListItem>
+                                        <ListItemIcon>
+                                            <img src={track.album.images[0].url}/>
+                                        </ListItemIcon>
+                                        <ListItemText>
+                                            {track.name} by {track.artists[0].name}
+                                        </ListItemText>
+                                    </ListItem>    
+                                ))}
+                        </List>
+                    </Stack>
+                    <Stack direction="column" alignItems="center" spacing={2}>
+                        <h2>Top 5 Saddest Tracks</h2>
+                        <List>
+                            {bottom5Tracks.map(({ track }, index) => (
+                                    <ListItem>
+                                        <ListItemIcon>
+                                            <img src={track.album.images[0].url}/>
+                                        </ListItemIcon>
+                                        <ListItemText>
+                                            {track.name} by {track.artists[0].name}
+                                        </ListItemText>
+                                    </ListItem>    
+                                ))}
+                        </List>
+                            
+                        
+                    </Stack>
+                </Stack>
+                <Button color='inherit' variant="contained" onClick={handleClick} style={{textTransform:"none", width:'100%', backgroundColor: "black"}} > Export Playlist</Button>
+            </Stack>
+        </Stack>
             
-        // </Grid>
-        <>
-            <h2>Track Valences for the Previous Month</h2>
-            <BarChart
-                    dataset={ data }
-                    xAxis={[{ dataKey: 'category', scaleType: 'band'}]}
-                    yAxis={[{label:'Count'}]}
-                    series={[{ dataKey: 'count'}]}
-                    width={500}
-                    height={300}
-            />
-
-            <h3>Top 5 Tracks by Valence</h3>
-            <ul>
-                {top5Tracks.map(({ track }, index) => (
-                    <li key={index}>{track.name} by {track.artists[0].name} (Valence: {track.valence})</li>
-                ))}
-            </ul>
-
-            <h3>Bottom 5 Tracks by Valence</h3>
-            <ul>
-                {bottom5Tracks.map(({ track }, index) => (
-                    <li key={index}>{track.name} by {track.artists[0].name} (Valence: {track.valence})</li>
-                ))}
-            </ul>
-            <Button onClick={handleClick}>export playlist</Button>
-        </>
+    
         
 
     );
