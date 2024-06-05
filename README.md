@@ -1,6 +1,6 @@
 # Mood Tunes 📻
 Log your daily emotions through songs 🙂
-- Select one song each day that describes your mood
+- Search, playback, and select songs each day that describes your mood
 - See which days/songs correlated to more negative/positive emotions and how they were distributed over the month
 - Export playlist of tracks each month \
 ![](https://github.com/alenachao/mood-tunes/blob/main/read-me-demo.gif)
