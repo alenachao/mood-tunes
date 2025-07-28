@@ -3,11 +3,15 @@
 const express = require("express");
 const querystring = require('querystring');
 const { getDatabase } = require('.././db');
+const dotenv = require('dotenv');
+
+dotenv.config(); 
 
 const router = express.Router();
 
-var client_id = process.env.REACT_APP_CLIENT_ID;
-var client_secret = process.env.REACT_APP_CLIENT_SECRET;
+var client_id = process.env.SPOTIFY_CLIENT_ID;
+console.log('SPOTIFY CLIENT:' + process.env.SPOTIFY_CLIENT_ID);
+var client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 global.access_token = ''
 global.spotifyID = ''
 global.username = ''

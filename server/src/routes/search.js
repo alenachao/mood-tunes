@@ -3,8 +3,8 @@
 const express = require("express");
 const router = express.Router();
 
-var client_id = process.env.REACT_APP_CLIENT_ID;
-var client_secret = process.env.REACT_APP_CLIENT_SECRET;
+var client_id = process.env.SPOTIFY_CLIENT_ID;
+var client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
 // Get search result tracks using Spotify API
 router.get("/", (req, res) => {

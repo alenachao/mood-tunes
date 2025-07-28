@@ -12,8 +12,9 @@ app.use('/api', routes);
 
 app.use(cors());
 
-app.listen(8080, () => {
-    console.log("App is listening on port 8080!");
+PORT=process.env.PORT
+app.listen(PORT, () => {
+    console.log(`App is listening on ${PORT}!`);
 });
 
 
